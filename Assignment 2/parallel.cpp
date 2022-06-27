@@ -39,7 +39,7 @@ int vecMultiply(std::vector<int>& vec1, std::vector<int>& vec2, std::vector<int>
 
 	#pragma omp parallel for shared(size)
 	for (i = 0; i < size; i++) {
-		omp_set_lock(&writelock);
+		omp_set_lock(&writelock); //Locks guarantee atomic data updates
 		product.at(i) = vec1.at(i) * vec2.at(i);
 		omp_unset_lock(&writelock);
 	}
@@ -47,7 +47,7 @@ int vecMultiply(std::vector<int>& vec1, std::vector<int>& vec2, std::vector<int>
 
 	#pragma omp parallel for shared(size)
 	for (i = 0; i < size; i++) {
-	 #pragma omp atomic
+	 #pragma omp atomic //Atomic synchronizes data so it cannot be read or written concurrently
 		std::cout << product[i];
 		total += product.at(i);
 	}
